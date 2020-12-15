@@ -5,7 +5,7 @@ with open("readme.md", "r", encoding="utf-8") as f:
 
 setuptools.setup(
     name="uchu-cli",
-    version="0.2.0",
+    version="0.3.0",
     description="A CLI based tool for working with the Uchu API",
     author="Jettford",
     long_description=long_description,
