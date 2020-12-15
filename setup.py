@@ -1,15 +1,10 @@
 import setuptools
 
-with open("readme.md", "r", encoding="utf-8") as f:
-    long_description = f.read()
-
 setuptools.setup(
     name="uchu-cli",
-    version="0.3.0",
+    version="0.3.1",
     description="A CLI based tool for working with the Uchu API",
     author="Jettford",
-    long_description=long_description,
-    long_description_content_type="text/markdown",
     url="https://github.com/UchuServer/cli",
     packages=setuptools.find_packages(),
     license="MIT License",
