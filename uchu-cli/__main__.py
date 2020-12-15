@@ -6,7 +6,8 @@ from setuptools import Command
 CommandList: list[str] = [
     "shutdown",
     "shutdown-world",
-    "list"
+    "list",
+    "start"
 ]
 
 def Help() -> None:
@@ -16,6 +17,7 @@ def Help() -> None:
     print("\tshutdown                   - Shutsdown all worlds")
     print("\tshutdown-world [GUID/Port] - Shutsdown specific world")
     print("\tlist                       - Lists all active servers")
+    print("\tstart [WorldID]            - Start a new world server")
 
     print("")
 
@@ -115,7 +117,7 @@ if __name__ == "__main__":
         IP: str = sys.argv[1]
         Port: int = int(sys.argv[2])
         CheckNetworkConnection(IP, Port)
-        Subcommmand: str = sys.argv[3]
+        Subcommand: str = sys.argv[3]
         SubcommandArgs: list[str] = list()
         
         i: int = 0
@@ -123,11 +125,11 @@ if __name__ == "__main__":
             SubcommandArgs.append(sys.argv[4 + i])
             i += 1
 
-        if Subcommmand not in CommandList: 
+        if Subcommand not in CommandList: 
             Help()
             exit()
 
-        if Subcommmand == "list":
+        if Subcommand == "list":
             r = requests.get("http://" + IP + ":" + str(Port) + "/instance/list")
             json = json.loads(r.text)
             if json["Success"]:
@@ -149,7 +151,7 @@ if __name__ == "__main__":
             else:
                 print("List request failed")
 
-        elif Subcommmand == "shutdown":
+        elif Subcommand == "shutdown":
             r = requests.get("http://" + IP + ":" + str(Port) + "/instance/list")
             jsonData = json.loads(r.text)
             if jsonData["Success"]:
@@ -163,7 +165,7 @@ if __name__ == "__main__":
                 print("Listing all servers for shutdown failed")
             exit()
 
-        elif Subcommmand == "shutdown-world":
+        elif Subcommand == "shutdown-world":
             Found: bool = False
             if len(SubcommandArgs) >= 1:
                 r = requests.get("http://" + IP + ":" + str(Port) + "/instance/list")
@@ -189,6 +191,17 @@ if __name__ == "__main__":
                 Help()
 
             if not Found:
+                Help()
+
+            exit()
+        elif Subcommand == "start":
+            if len(SubcommandArgs) >= 1:
+                r = requests.get("http://" + IP + ":" + str(Port) + "/instance/commission?" + SubcommandArgs[0])
+                if r.status_code != 200:
+                    print("Failed to start " + GetWorldName(str(SubcommandArgs[0])))
+                else:
+                    print("Started world " + GetWorldName(str(SubcommandArgs[0])))
+            else:
                 Help()
 
             exit()
