@@ -2,7 +2,11 @@ import requests
 from commands import CommandList, HelpList, ArgsList
 
 def WorkOutLargestCommand() -> int:
-    return 30
+    Largest: int = 0
+    for x in CommandList:
+        if (len(x) + len(GetArgs(x)) + 1) > Largest:
+            Largest = (len(x) + len(GetArgs(x)) + 1)
+    return Largest
 
 def GetArgs(Command: str) -> str:
     Return: str = ""
@@ -24,6 +28,7 @@ def Help() -> None:
         print(" - " + HelpList[x]) # Print Help List
 
     print("")
+    exit()
 
 def CheckNetworkConnection(IP: str, Port: int) -> None:
     try:
