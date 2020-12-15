@@ -1,17 +1,17 @@
 import requests
-from commands import CommandList, HelpList, ArgsList
+from . import commands
 
 def WorkOutLargestCommand() -> int:
     Largest: int = 0
-    for x in CommandList:
+    for x in commands.CommandList:
         if (len(x) + len(GetArgs(x)) + 1) > Largest:
             Largest = (len(x) + len(GetArgs(x)) + 1)
     return Largest
 
 def GetArgs(Command: str) -> str:
     Return: str = ""
-    if ArgsList[Command][0] == "": return Return
-    for x in ArgsList[Command]:
+    if commands.ArgsList[Command][0] == "": return Return
+    for x in commands.ArgsList[Command]:
         Return += "[" + x + "] "
     return Return
 
@@ -21,11 +21,11 @@ def Help() -> None:
     print("Subcommands: ", end="\n\n")
     i: int = 0
     Largest: int = WorkOutLargestCommand()
-    for x in CommandList:
+    for x in commands.CommandList:
         print("\t" + x, end="") # Print Commands
         print(" " + GetArgs(x), end="") # Print Args
         print(" "*(Largest-(len(x) + 1 + len(GetArgs(x)))), end="") # Print Gap
-        print(" - " + HelpList[x]) # Print Help List
+        print(" - " + commands.HelpList[x]) # Print Help List
 
     print("")
     exit()

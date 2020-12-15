@@ -4,3 +4,4 @@
 dist/
 build/
 uchu_cli.egg-info/
+build.bat

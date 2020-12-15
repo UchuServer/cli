@@ -4,11 +4,9 @@ import requests
 
 # PyLance doesn't like these imports for some reason
 # But Jedi does :tada:
-import worlds 
-from commands import CommandList, RegisterCommand, CommandFunction, ArgsList
-from utils import Help, CheckNetworkConnection
+from . import worlds, commands, utils
 
-@RegisterCommand(command="shutdown", help="Shutsdown all worlds", arguments=[""])
+@commands.RegisterCommand(command="shutdown", help="Shutsdown all worlds", arguments=[""])
 def Shutdown(SubCommand, SubcommandArgs):
     r = requests.get("http://" + IP + ":" + str(Port) + "/instance/list")
     jsonData = json.loads(r.text)
@@ -26,7 +24,7 @@ def Shutdown(SubCommand, SubcommandArgs):
     exit()
     
     
-@RegisterCommand(command="shutdown-world", help="Shutsdown specific world", arguments=["GUID/Port"]) 
+@commands.RegisterCommand(command="shutdown-world", help="Shutsdown specific world", arguments=["GUID/Port"]) 
 def ShutdownWorld(SubCommand, SubcommandArgs):
     Found: bool = False
     if len(SubcommandArgs) >= 1:
@@ -54,11 +52,11 @@ def ShutdownWorld(SubCommand, SubcommandArgs):
             print("Listing all servers for shutdown-world failed")
 
     if not Found:
-        Help()
+        utils.Help()
 
     exit()
 
-@RegisterCommand(command="start", help="Start a new world server", arguments=["WorldID"])
+@commands.RegisterCommand(command="start", help="Start a new world server", arguments=["WorldID"])
 def Start(SubCommand, SubcommandArgs):
     if len(SubcommandArgs) >= 1:
         r = requests.get("http://" + IP + ":" + str(Port) + "/instance/commission?" + SubcommandArgs[0])
@@ -67,11 +65,11 @@ def Start(SubCommand, SubcommandArgs):
         else:
             print("Started world " + worlds.GetWorldName(str(SubcommandArgs[0])))
     else:
-        Help()
+        utils.Help()
 
     exit()
 
-@RegisterCommand(command="list", help="Lists all active servers", arguments=[""])
+@commands.RegisterCommand(command="list", help="Lists all active servers", arguments=[""])
 def List(SubCommand, SubcommandArgs):
     r = requests.get("http://" + IP + ":" + str(Port) + "/instance/list")
     jsonData = json.loads(r.text)
@@ -99,11 +97,11 @@ def List(SubCommand, SubcommandArgs):
 ##################################################################################################
 
 if not len(sys.argv) >= 4:
-    Help()
+    utils.Help()
 
 IP: str = sys.argv[1]
 Port: int = int(sys.argv[2])
-CheckNetworkConnection(IP, Port)
+utils.CheckNetworkConnection(IP, Port)
 Subcommand: str = sys.argv[3]
 SubcommandArgs: list[str] = list()
 
@@ -112,13 +110,13 @@ for x in range(len(sys.argv) - 4):
     SubcommandArgs.append(sys.argv[4 + i])
     i += 1
 
-if Subcommand not in CommandList: 
-    Help()
+if Subcommand not in commands.CommandList: 
+    utils.Help()
 
-if ArgsList[Subcommand][0] != "":
-    if len(SubcommandArgs) != len(ArgsList[Subcommand]): 
-        Help()
+if commands.ArgsList[Subcommand][0] != "":
+    if len(SubcommandArgs) != len(commands.ArgsList[Subcommand]): 
+        utils.Help()
 
-CommandFunction[Subcommand](Subcommand, SubcommandArgs)
+commands.CommandFunction[Subcommand](Subcommand, SubcommandArgs)
 
 
