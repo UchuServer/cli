@@ -1,6 +1,7 @@
 import sys
 import json
 import requests
+from typing import List
 
 # PyLance doesn't like these imports for some reason
 # But Jedi does :tada:
@@ -103,7 +104,7 @@ IP: str = sys.argv[1]
 Port: int = int(sys.argv[2])
 utils.CheckNetworkConnection(IP, Port)
 Subcommand: str = sys.argv[3]
-SubcommandArgs: list[str] = list()
+SubcommandArgs = []
 
 i: int = 0
 for x in range(len(sys.argv) - 4):
