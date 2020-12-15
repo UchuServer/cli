@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
     name="uchu-cli",
-    version="0.3.1",
+    version="0.3.2",
     description="A CLI based tool for working with the Uchu API",
     author="Jettford",
     url="https://github.com/UchuServer/cli",

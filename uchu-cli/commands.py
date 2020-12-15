@@ -1,6 +1,7 @@
 from functools import wraps
+from typing import List
 
-CommandList: list[str] = []
+CommandList: List[str] = []
 CommandFunction: dict = {}
 HelpList: dict = {}
 ArgsList: dict = {}
