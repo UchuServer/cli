@@ -7,6 +7,20 @@ from typing import List
 # But Jedi does :tada:
 from . import worlds, commands, utils
 
+@commands.RegisterCommand(command="broadcast", help="Send an announcement to all players", arguments=["title", "message"])
+def Broadcast(SubCommand, SubcommandArgs):
+    r = requests.get("http://" + IP + ":" + str(Port) + "/instance/list")
+    jsonData = json.loads(r.text)
+
+    if jsonData["Success"]:
+        for item in jsonData["Instances"]:
+            r2 = requests.get("http://" + IP + ":" + str(item["ApiPort"]) + "/world/announce?title=" + SubcommandArgs[0] + "&message=" + SubcommandArgs[1])
+            if r2.status_code != 200:
+                print("Failed to announce at " + worlds.GetWorldName(str(item["Zones"][0])))
+    else:
+        print("Listing all servers for broadcasting failed")
+    exit()
+
 @commands.RegisterCommand(command="shutdown", help="Shutsdown all worlds", arguments=[""])
 def Shutdown(SubCommand, SubcommandArgs):
     r = requests.get("http://" + IP + ":" + str(Port) + "/instance/list")
@@ -18,7 +32,7 @@ def Shutdown(SubCommand, SubcommandArgs):
                 print("Shutting down " + worlds.GetWorldName(str(item["Zones"][0])))
                 r2 = requests.get("http://" + IP + ":" + str(Port) + "/instance/decommission?" + item["Id"])
                 
-                if r.status_code != 200:
+                if r2.status_code != 200:
                     print("Failed to close " + worlds.GetWorldName(str(item["Zones"][0])))
     else:
         print("Listing all servers for shutdown failed")
@@ -44,7 +58,7 @@ def ShutdownWorld(SubCommand, SubcommandArgs):
 
                     r2 = requests.get("http://" + IP + ":" + str(Port) + "/instance/decommission?" + item["Id"])
                     
-                    if r.status_code != 200:
+                    if r2.status_code != 200:
                         print("Failed to close " + "/" + str(SubcommandArgs[0]))
 
                     print("Closed " + Name + ":" + str(item["Port"]))
